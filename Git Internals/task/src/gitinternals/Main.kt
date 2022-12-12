@@ -5,14 +5,20 @@ import java.util.zip.InflaterInputStream
 
 fun main() {
 
-    println("Enter git object location:")
+    println("Enter .git directory location:")
     val inputPath = readln()
-    val fileInputStream = FileInputStream(inputPath)
+    println("Enter git object hash:")
+    val inputHash = readln()
+
+    val filePath = inputPath + "/objects/" + inputHash.substring(0, 2) + "/" + inputHash.substring(2)
+    val fileInputStream = FileInputStream(filePath)
     val inflaterInputStream = InflaterInputStream(fileInputStream)
 
+    var inflatedInput = ""
+
     inflaterInputStream.readAllBytes().map {
-
-        if ( it.toChar() == '\u0000') println()
-        else print(it.toChar()) }
-
+        inflatedInput += it.toChar()
+    }
+    val firstLine = inflatedInput.split('\u0000')[0].split(' ')
+    println("type:${firstLine[0]} length:${firstLine[1]}")
 }
